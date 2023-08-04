@@ -7,8 +7,6 @@
     export let activeRowIndex = 0;
     export let activeCellIndex = 0;
 
-    console.log("grid: " + grid);
-    console.log("grid height: " + grid.height);
     let square: Square;
     let inputElements: (HTMLInputElement | null)[][] = [];
     //todo should be generic in size of xword.
@@ -119,7 +117,7 @@
 </script>
 
 {#each displaySquares as row, rowIndex}
-    <div>
+    <div class="row">
         {#each row as square, cellIndex}
             <input
                 class="square {square.isLit ? 'lit' : 'unlit'} {isActive(
@@ -140,12 +138,18 @@
 <svelte:window on:keydown={onKeyDown} />
 
 <style>
+    .row {
+        display: flex;
+    }
+    .row input {
+        flex: 1;
+        box-sizing: border-box; /* ensures padding and border are included in the element's total width */
+    }
     .square {
-        display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 30px;
-        height: 30px;
+        aspect-ratio: 1/1;
+        min-width: 0;
         border: 1px solid #000;
         font-size: 18px;
         text-transform: uppercase;

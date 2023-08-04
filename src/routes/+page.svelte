@@ -157,14 +157,20 @@
 
 <svelte:window bind:innerWidth bind:innerHeight />
 
-{#if innerWidth < 1000}
-    <p>MOBILE!</p>
-{/if}
-<Grid grid={dummyGrid} activeRowIndex={0} />
-
-<ClueColumn clues={dummyClues} />
+<div class="gridContainer {innerWidth > 700 ? 'sideBySide' : ''}">
+    <Grid grid={dummyGrid} activeRowIndex={0} />
+</div>
+<div class="columnContainer {innerWidth > 700 ? 'sideBySide' : ''}">
+    <ClueColumn clues={dummyClues} />
+</div>
 
 <style>
+    .gridContainer {
+        max-width: 500px;
+    }
+    .sideBySide {
+        display: inline-block;
+    }
     .square {
         display: inline-flex;
         align-items: center;
