@@ -1,9 +1,7 @@
 <script lang="ts">
-    // Import required modules
     import { onMount } from "svelte";
     import type { Square } from "../types.svelte";
     import type { Clue } from "../api/types.svelte";
-    import ClueText from "../ClueText.svelte";
     import ClueColumn from "../ClueColumn.svelte";
     import Grid from "../Grid.svelte";
     import { dummyGrid } from "../dummy_grid";
@@ -19,46 +17,7 @@
 
     // Sample data for testing
     let dummy: string;
-    let crosswordData: Square[][];
     let networkData;
-    crosswordData = [
-        // Replace this sample data with data fetched from the server
-        [
-            { isLit: true, content: "H" },
-            { isLit: true, content: "E" },
-            { isLit: true, content: "L" },
-            { isLit: true, content: "L" },
-            { isLit: true, content: "O" },
-        ],
-        [
-            { isLit: true, content: null },
-            { isLit: false, content: null },
-            { isLit: false, content: null },
-            { isLit: true, content: null },
-            { isLit: true, content: null },
-        ],
-        [
-            { isLit: true, content: null },
-            { isLit: false, content: null },
-            { isLit: false, content: null },
-            { isLit: true, content: null },
-            { isLit: true, content: null },
-        ],
-        [
-            { isLit: true, content: "W" },
-            { isLit: true, content: null },
-            { isLit: false, content: null },
-            { isLit: true, content: null },
-            { isLit: true, content: null },
-        ],
-        [
-            { isLit: true, content: null },
-            { isLit: true, content: null },
-            { isLit: true, content: null },
-            { isLit: true, content: null },
-            { isLit: true, content: "D" },
-        ],
-    ];
 
     let dummySpan = {
         linear_span: [
@@ -170,25 +129,5 @@
     }
     .sideBySide {
         display: inline-block;
-    }
-    .square {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 30px;
-        height: 30px;
-        border: 1px solid #000;
-        font-size: 18px;
-        text-transform: uppercase;
-        text-align: center;
-    }
-
-    .lit {
-        background-color: #fff;
-    }
-
-    .unlit {
-        background-color: #000;
-        color: #fff;
     }
 </style>
