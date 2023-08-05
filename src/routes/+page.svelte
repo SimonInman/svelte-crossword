@@ -1,10 +1,11 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import type { Square } from "../types.svelte";
-    import type { Clue } from "../api/types.svelte";
+    import type { Clue, Clues } from "../api/types.svelte";
     import ClueColumn from "../ClueColumn.svelte";
     import Grid from "../Grid.svelte";
     import { dummyGrid } from "../dummy_grid";
+    import CluesContainer from "../CluesContainer.svelte";
 
     let activeRowIndex = 0;
     let activeCellIndex = 0;
@@ -13,7 +14,7 @@
 
     // Placeholder for the server address
     const serverAddress =
-        "https://csolve.fly.dev/crossword/guardian-cryptic/29131";
+        "https://csolve.fly.dev/crossword/guardian-cryptic/29140";
 
     // Sample data for testing
     let dummy: string;
@@ -51,8 +52,9 @@
         overflow_clues: [],
         underflow_clues: [],
     };
-    let dummyClues: Clue[];
-    dummyClues = [
+    let dummyClueSet: Clue[];
+    let dummyClues: Clues;
+    dummyClueSet = [
         {
             number: 1,
             surface: "clue 1",
@@ -84,6 +86,7 @@
             },
         },
     ];
+    dummyClues = { across: dummyClueSet, down: dummyClueSet };
 
     // Fetch data initially and set up polling on mount
     // onMount(() => {
@@ -120,7 +123,10 @@
     <Grid grid={dummyGrid} activeRowIndex={0} />
 </div>
 <div class="columnContainer {innerWidth > 700 ? 'sideBySide' : ''}">
-    <ClueColumn clues={dummyClues} />
+    <CluesContainer
+        clues={dummyClues}
+        widthAvailable={innerWidth > 700 ? innerWidth - 500 : innerWidth}
+    />
 </div>
 
 <style>

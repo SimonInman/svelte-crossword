@@ -10,6 +10,7 @@
         components["schemas"]["Cell_for_StyledCellValue"];
     export type CrosswordForStyledCellValue =
         components["schemas"]["Crossword_for_StyledCellValue"];
+    export type Clues = components["schemas"]["Clues"];
     export type Clue = components["schemas"]["Clue"];
     export type Colour = components["schemas"]["Colour"];
     export type Pattern = components["schemas"]["Pattern"];

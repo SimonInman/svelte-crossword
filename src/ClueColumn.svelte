@@ -3,6 +3,7 @@
     import type { Clue } from "./api/types.svelte";
 
     export let clues: Clue[];
+    export let title: string;
 </script>
 
 {#each clues as clue}
