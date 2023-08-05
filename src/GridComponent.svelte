@@ -44,7 +44,8 @@
     function convertRow(cells: CellForStyledCellValue[]): Square[] {
         return cells.map((cell) => convertCell(cell));
     }
-    const displaySquares: Square[][] = grid.cells.map((row) => convertRow(row));
+    let displaySquares: Square[][];
+    $: displaySquares = grid.cells.map((row) => convertRow(row));
 
     const isActive = (rowIndex: number, cellIndex: number) => {
         return rowIndex === activeRowIndex && cellIndex === activeCellIndex;
