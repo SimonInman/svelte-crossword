@@ -6,6 +6,7 @@
     export let title: string;
 </script>
 
+<h3>{title}</h3>
 {#each clues as clue}
     <div>
         <ClueText {clue} answered={true} />
