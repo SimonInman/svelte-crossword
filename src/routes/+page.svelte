@@ -1,9 +1,14 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import type { Square } from "../types.svelte";
-    import type { Clue, Clues } from "../api/types.svelte";
+    import type {
+        Clue,
+        Clues,
+        CrosswordForStyledCellValue,
+        Grid,
+    } from "../api/types.svelte";
     import ClueColumn from "../ClueColumn.svelte";
-    import Grid from "../Grid.svelte";
+    import GridComponent from "../GridComponent.svelte";
     import { dummyGrid } from "../dummy_grid";
     import CluesContainer from "../CluesContainer.svelte";
 
@@ -18,7 +23,9 @@
 
     // Sample data for testing
     let dummy: string;
-    let networkData;
+    let networkData: CrosswordForStyledCellValue;
+    let networkGrid: Grid;
+    let networkClues: Clues;
 
     let dummySpan = {
         linear_span: [
@@ -89,11 +96,11 @@
     dummyClues = { across: dummyClueSet, down: dummyClueSet };
 
     // Fetch data initially and set up polling on mount
-    // onMount(() => {
-    //     fetchData();
-    //     const interval = setInterval(fetchData, 5000);
-    //     return () => clearInterval(interval);
-    // });
+    onMount(() => {
+        fetchData();
+        // const interval = setInterval(fetchData, 5000);
+        // return () => clearInterval(interval);
+    });
     const isActive = (rowIndex: number, cellIndex: number) => {
         return rowIndex === activeRowIndex && cellIndex === activeCellIndex;
     };
@@ -104,6 +111,8 @@
             const response = await fetch(serverAddress);
             networkData = await response.json();
             console.log("fetched: " + response.body);
+            networkGrid = networkData.grid;
+            networkClues = networkData.clues;
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -119,15 +128,17 @@
 
 <svelte:window bind:innerWidth bind:innerHeight />
 
-<div class="gridContainer {innerWidth > 700 ? 'sideBySide' : ''}">
-    <Grid grid={dummyGrid} activeRowIndex={0} />
-</div>
-<div class="columnContainer {innerWidth > 700 ? 'sideBySide' : ''}">
-    <CluesContainer
-        clues={dummyClues}
-        widthAvailable={innerWidth > 700 ? innerWidth - 500 : innerWidth}
-    />
-</div>
+{#if networkGrid != undefined}
+    <div class="gridContainer {innerWidth > 700 ? 'sideBySide' : ''}">
+        <GridComponent grid={networkGrid} activeRowIndex={0} />
+    </div>
+    <div class="columnContainer {innerWidth > 700 ? 'sideBySide' : ''}">
+        <CluesContainer
+            clues={networkClues}
+            widthAvailable={innerWidth > 700 ? innerWidth - 500 : innerWidth}
+        />
+    </div>
+{/if}
 
 <style>
     .gridContainer {
