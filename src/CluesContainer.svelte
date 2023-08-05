@@ -5,19 +5,18 @@
 
     export let clues: Clues;
     export let widthAvailable: number;
-
-    let across = clues.across;
-    let down = clues.down;
 </script>
 
-<div class="container">
-    <div class={widthAvailable > 400 ? "sideBySide" : ""}>
-        <ClueColumn clues={clues.across} title={"Across"} />
+{#if clues != undefined}
+    <div class="container">
+        <div class={widthAvailable > 400 ? "sideBySide" : ""}>
+            <ClueColumn clues={clues.across} title={"Across"} />
+        </div>
+        <div class={widthAvailable > 400 ? "sideBySide" : ""}>
+            <ClueColumn clues={clues.down} title={"Down"} />
+        </div>
     </div>
-    <div class={widthAvailable > 400 ? "sideBySide" : ""}>
-        <ClueColumn clues={clues.down} title={"Down"} />
-    </div>
-</div>
+{/if}
 
 <style>
     .container {

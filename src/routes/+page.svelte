@@ -21,6 +21,9 @@
     const serverAddress =
         "https://csolve.fly.dev/crossword/guardian-cryptic/29140";
 
+    const serverUpdatesAddress =
+        "https://csolve.fly.dev/solve/guardian-cryptic/29140/the-everymen/get";
+
     // Sample data for testing
     let dummy: string;
     let networkData: CrosswordForStyledCellValue;
@@ -105,7 +108,7 @@
         return rowIndex === activeRowIndex && cellIndex === activeCellIndex;
     };
 
-    const fetchData = async () => {
+    const fetchInitialData = async () => {
         try {
             // Fetch data from the server (replace "YOUR_SERVER_ADDRESS" with the actual server URL)
             const response = await fetch(serverAddress);
@@ -118,10 +121,24 @@
         }
     };
 
+    const fetchData = async () => {
+        try {
+            // Fetch data from the server (replace "YOUR_SERVER_ADDRESS" with the actual server URL)
+            const response = await fetch(serverUpdatesAddress);
+            let updatedGrid: Grid;
+            updatedGrid = await response.json();
+            console.log("updatedGrid has height: " + updatedGrid.height);
+            networkGrid = updatedGrid;
+            // networkClues = networkData.clues;
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
     // Fetch data initially and set up polling on mount
     onMount(() => {
-        fetchData();
-        const interval = setInterval(fetchData, 5000);
+        fetchInitialData();
+        const interval = setInterval(fetchData, 15000);
         return () => clearInterval(interval);
     });
 </script>
