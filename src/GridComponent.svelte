@@ -165,4 +165,10 @@
         background-color: #000;
         color: #fff;
     }
+
+    /* stop rounding corners on ios */
+    input[type="text"] {
+        -webkit-appearance: none;
+        border-radius: 0;
+    }
 </style>
