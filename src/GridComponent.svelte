@@ -7,6 +7,8 @@
     export let activeRowIndex = 0;
     export let activeCellIndex = 0;
 
+    let cellHeight: number;
+    $: fontSize = cellHeight * 0.6;
     let square: Square;
     let inputElements: (HTMLInputElement | null)[][] = [];
     //todo should be generic in size of xword.
@@ -118,9 +120,11 @@
 </script>
 
 {#each displaySquares as row, rowIndex}
-    <div class="row">
+    <div class="row" bind:clientHeight={cellHeight}>
         {#each row as square, cellIndex}
+            <!-- <div class="cell-container"> -->
             <input
+                style="font-size: {fontSize}px"
                 class="square {square.isLit ? 'lit' : 'unlit'} {isActive(
                     rowIndex,
                     cellIndex
@@ -132,6 +136,10 @@
                 readonly={!square.isLit}
                 bind:this={inputElements[rowIndex][cellIndex]}
             />
+            <!-- <p style="font-size: {fontSize}px" class="clue-number-text">
+                    1
+                </p>
+            </div> -->
         {/each}
     </div>
 {/each}
@@ -151,6 +159,7 @@
         justify-content: center;
         aspect-ratio: 1/1;
         min-width: 0;
+        min-height: 0;
         border: 1px solid #000;
         font-size: 18px;
         text-transform: uppercase;
