@@ -1,16 +1,16 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import type { Square } from "../types.svelte";
+    import type { Square } from "../../types.svelte";
     import type {
         Clue,
         Clues,
         CrosswordForStyledCellValue,
         Grid,
-    } from "../api/types.svelte";
-    import ClueColumn from "../ClueColumn.svelte";
-    import GridComponent from "../GridComponent.svelte";
-    import { dummyGrid } from "../dummy_grid";
-    import CluesContainer from "../CluesContainer.svelte";
+    } from "../../api/types.svelte";
+    import ClueColumn from "../../ClueColumn.svelte";
+    import GridComponent from "../../GridComponent.svelte";
+    import { dummyGrid } from "../../dummy_grid";
+    import CluesContainer from "../../CluesContainer.svelte";
 
     let activeRowIndex = 0;
     let activeCellIndex = 0;
