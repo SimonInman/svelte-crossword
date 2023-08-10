@@ -19,10 +19,10 @@
 
     // Placeholder for the server address
     const serverAddress =
-        "https://csolve.fly.dev/crossword/guardian-cryptic/29140";
+        "https://csolve.fly.dev/crossword/guardian-cryptic/29138";
 
     const serverUpdatesAddress =
-        "https://csolve.fly.dev/solve/guardian-cryptic/29140/the-everymen/get";
+        "https://csolve.fly.dev/solve/guardian-cryptic/29138/the-everymen/get";
 
     // Sample data for testing
     let dummy: string;

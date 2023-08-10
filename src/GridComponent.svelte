@@ -1,32 +1,25 @@
 <script lang="ts">
+    import GridSquare from "./GridSquare.svelte";
     import type { Grid } from "./api/types.svelte";
     import type { CellForStyledCellValue } from "./api/types.svelte";
     import type { Square } from "./types.svelte";
 
     export let grid: Grid;
-    export let activeRowIndex = 0;
-    export let activeCellIndex = 0;
+    export let initialActiveRowIndex = 0;
+    export let initialActiveCellIndex = 0;
+
+    $: activeRowIndex = initialActiveRowIndex;
+    $: activeCellIndex = initialActiveCellIndex;
 
     let cellHeight: number;
     $: fontSize = cellHeight * 0.6;
     let square: Square;
-    let inputElements: (HTMLInputElement | null)[][] = [];
-    //todo should be generic in size of xword.
-    inputElements[0] = [];
-    inputElements[1] = [];
-    inputElements[2] = [];
-    inputElements[3] = [];
-    inputElements[4] = [];
-    inputElements[5] = [];
-    inputElements[6] = [];
-    inputElements[7] = [];
-    inputElements[8] = [];
-    inputElements[9] = [];
-    inputElements[10] = [];
-    inputElements[11] = [];
-    inputElements[12] = [];
-    inputElements[13] = [];
-    inputElements[14] = [];
+    let emptyRow = () => {
+        let out = new Array(grid.width).fill(null);
+        return out;
+    };
+    let inputElements: (GridSquare | null)[][] = [];
+    inputElements = new Array(grid.height).fill(emptyRow());
 
     const gridCellValue = (cell: CellForStyledCellValue) => {
         if (cell.value == "Closed") {
@@ -40,7 +33,11 @@
     };
 
     function convertCell(cell: CellForStyledCellValue): Square {
-        return { isLit: cell.value != "Closed", content: gridCellValue(cell) };
+        return {
+            isLit: cell.value != "Closed",
+            content: gridCellValue(cell),
+            clueNumber: cell.number,
+        };
     }
 
     function convertRow(cells: CellForStyledCellValue[]): Square[] {
@@ -55,9 +52,17 @@
 
     const onKeyDown = (event: KeyboardEvent) => {
         if (event.key.startsWith("Arrow")) {
+            console.log(event.key);
             event.preventDefault(); // Prevent browser default behavior for arrow keys
 
             const { key } = event;
+
+            console.log(
+                "current row and cell: " +
+                    activeRowIndex +
+                    " " +
+                    activeCellIndex
+            );
 
             // Calculate the new rowIndex and cellIndex based on the arrow key pressed
             let newRowIndex = activeRowIndex;
@@ -99,22 +104,6 @@
             // Update the active cell's rowIndex and cellIndex
             activeRowIndex = newRowIndex;
             activeCellIndex = newCellIndex;
-
-            // Set focus on the new active cell to allow keyboard input
-            if (
-                inputElements[activeRowIndex] &&
-                inputElements[activeRowIndex][activeCellIndex]
-            ) {
-                const activeCell =
-                    inputElements[activeRowIndex][activeCellIndex];
-                console.log(
-                    "setting active cell to" +
-                        activeRowIndex +
-                        " " +
-                        activeCellIndex
-                );
-                activeCell.focus();
-            }
         }
     };
 </script>
@@ -122,24 +111,12 @@
 {#each displaySquares as row, rowIndex}
     <div class="row" bind:clientHeight={cellHeight}>
         {#each row as square, cellIndex}
-            <!-- <div class="cell-container"> -->
-            <input
-                style="font-size: {fontSize}px"
-                class="square {square.isLit ? 'lit' : 'unlit'} {isActive(
-                    rowIndex,
-                    cellIndex
-                )
-                    ? 'active'
-                    : ''}"
-                type="text"
-                bind:value={square.content}
-                readonly={!square.isLit}
-                bind:this={inputElements[rowIndex][cellIndex]}
+            <GridSquare
+                {fontSize}
+                isActive={rowIndex === activeRowIndex &&
+                    cellIndex === activeCellIndex}
+                {square}
             />
-            <!-- <p style="font-size: {fontSize}px" class="clue-number-text">
-                    1
-                </p>
-            </div> -->
         {/each}
     </div>
 {/each}
@@ -149,35 +126,5 @@
 <style>
     .row {
         display: flex;
-    }
-    .row input {
-        flex: 1;
-        box-sizing: border-box; /* ensures padding and border are included in the element's total width */
-    }
-    .square {
-        align-items: center;
-        justify-content: center;
-        aspect-ratio: 1/1;
-        min-width: 0;
-        min-height: 0;
-        border: 1px solid #000;
-        font-size: 18px;
-        text-transform: uppercase;
-        text-align: center;
-    }
-
-    .lit {
-        background-color: #fff;
-    }
-
-    .unlit {
-        background-color: #000;
-        color: #fff;
-    }
-
-    /* stop rounding corners on ios */
-    input[type="text"] {
-        -webkit-appearance: none;
-        border-radius: 0;
     }
 </style>

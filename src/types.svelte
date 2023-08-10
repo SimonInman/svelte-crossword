@@ -3,6 +3,7 @@
         isLit: boolean;
         // content: string;
         content: string | null;
+        clueNumber: number | null | undefined;
     };
     // export type RevealedWord = {
     //     word: string;
