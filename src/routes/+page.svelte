@@ -28,7 +28,7 @@
     }
 
     function handleClick() {
-        goto(`solve/${selectedOption1}/${selectedOption2}`);
+        goto(`solve/${selectedOption1}/${selectedOption2}/the-everymen`);
     }
 </script>
 
