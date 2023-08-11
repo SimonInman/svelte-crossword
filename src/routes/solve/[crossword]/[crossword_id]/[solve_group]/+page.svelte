@@ -8,6 +8,7 @@
     } from "../../../../../api/types.svelte";
     import GridComponent from "../../../../../GridComponent.svelte";
     import CluesContainer from "../../../../../CluesContainer.svelte";
+    import SelectionHeader from "../../../../../SelectionHeader.svelte";
 
     export let data;
 
@@ -62,9 +63,11 @@
 
 <svelte:window bind:innerWidth bind:innerHeight />
 
+<SelectionHeader initialSelectedCrossword={data.crossword} />
+
 {#if networkGrid != undefined}
     <div class="gridContainer {innerWidth > 700 ? 'sideBySide' : ''}">
-        <GridComponent grid={networkGrid} activeRowIndex={0} />
+        <GridComponent grid={networkGrid} />
     </div>
     <div class="columnContainer {innerWidth > 700 ? 'sideBySide' : ''}">
         <CluesContainer
