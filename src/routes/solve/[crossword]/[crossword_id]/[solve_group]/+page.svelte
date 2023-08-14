@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import type { Square } from "../../../../../types.svelte";
     import type {
+        Clue,
         Clues,
         CrosswordForStyledCellValue,
         Grid,
@@ -17,25 +18,63 @@
     let innerWidth = 0;
     let innerHeight = 0;
 
+    $: useHorizontalLayout = innerWidth > 700;
+
     // Placeholder for the server address
     const serverAddress = `https://csolve.fly.dev/crossword/${data.crossword}/${data.crossword_id}`;
 
     const serverUpdatesAddress = `https://csolve.fly.dev/solve/${data.crossword}/${data.crossword_id}/${data.solve_group}/get`;
 
     let networkData: CrosswordForStyledCellValue;
-    let networkGrid: Grid;
+    $: networkGrid = data.networkData.grid;
     let networkClues: Clues;
+    $: networkClues = data.networkData.clues;
 
-    const fetchInitialData = async () => {
-        try {
-            // Fetch data from the server (replace "YOUR_SERVER_ADDRESS" with the actual server URL)
-            const response = await fetch(serverAddress);
-            networkData = await response.json();
-            console.log("fetched: " + response.body);
-            networkGrid = networkData.grid;
-            networkClues = networkData.clues;
-        } catch (error) {
-            console.error("Error fetching data:", error);
+    $: crossword_id = data.crossword_id;
+
+    let activeClue: Clue | null;
+    $: activeClue = null;
+
+    const clueCoversCell = (clue: Clue, row: number, col: number) => {
+        let span = clue.span_info.linear_span;
+        let inSpan = span.filter(
+            (blah) => blah.column == col && blah.row == row
+        );
+        return inSpan.length > 0;
+    };
+
+    $: cluesCoveringCell = (row: number, col: number) => {
+        let allClues = networkClues.across.concat(networkClues.down);
+        if (!allClues) {
+            return [];
+        }
+        console.log("length of networkClues: ");
+        return allClues.filter((clue: Clue) => clueCoversCell(clue, row, col));
+    };
+
+    const setActiveCell = (row: number, col: number) => {
+        if (!networkClues) {
+            return;
+        }
+        let potential = cluesCoveringCell(row, col);
+        if (potential.length == 0) {
+            // Probably shouldn't happen, but whatever
+            return;
+        }
+        if (potential.length == 1) {
+            // Probably shouldn't happen, but whatever
+            console.log("setting active clue");
+            activeClue = potential[0];
+            return;
+        }
+
+        if (potential[0] == activeClue) {
+            // Switch clues if already have this one active.
+            console.log("setting active clue");
+            activeClue = potential[1];
+        } else {
+            console.log("setting active clue");
+            activeClue = potential[0];
         }
     };
 
@@ -52,13 +91,6 @@
             console.error("Error fetching data:", error);
         }
     };
-
-    // Fetch data initially and set up polling on mount
-    onMount(() => {
-        fetchInitialData();
-        const interval = setInterval(fetchData, 15000);
-        return () => clearInterval(interval);
-    });
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />
@@ -66,15 +98,22 @@
 <SelectionHeader initialSelectedCrossword={data.crossword} />
 
 {#if networkGrid != undefined}
-    <div class="gridContainer {innerWidth > 700 ? 'sideBySide' : ''}">
-        <GridComponent grid={networkGrid} />
-    </div>
-    <div class="columnContainer {innerWidth > 700 ? 'sideBySide' : ''}">
-        <CluesContainer
-            clues={networkClues}
-            widthAvailable={innerWidth > 700 ? innerWidth - 500 : innerWidth}
-        />
-    </div>
+    {#key crossword_id}
+        {#if !useHorizontalLayout && activeClue}
+            <div>{activeClue.surface}</div>
+        {/if}
+        <div class="gridContainer {useHorizontalLayout ? 'sideBySide' : ''}">
+            <GridComponent grid={networkGrid} {setActiveCell} />
+        </div>
+        <div class="columnContainer {useHorizontalLayout ? 'sideBySide' : ''}">
+            <CluesContainer
+                clues={networkClues}
+                widthAvailable={useHorizontalLayout
+                    ? innerWidth - 500
+                    : innerWidth}
+            />
+        </div>
+    {/key}
 {/if}
 
 <style>

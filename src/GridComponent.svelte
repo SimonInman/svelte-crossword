@@ -7,6 +7,7 @@
     export let grid: Grid;
     export let initialActiveRowIndex = 0;
     export let initialActiveCellIndex = 0;
+    export let setActiveCell: (row: number, col: number) => void;
 
     $: activeRowIndex = initialActiveRowIndex;
     $: activeCellIndex = initialActiveCellIndex;
@@ -104,6 +105,7 @@
             // Update the active cell's rowIndex and cellIndex
             activeRowIndex = newRowIndex;
             activeCellIndex = newCellIndex;
+            setActiveCell(activeRowIndex, activeCellIndex);
         }
     };
 </script>

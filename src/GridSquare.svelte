@@ -34,6 +34,7 @@
         box-sizing: border-box; /* ensures padding and border are included in the element's total width */
         width: 100%;
         height: 100%;
+        text-align: center;
         border: 0;
     }
     .cell-container {
