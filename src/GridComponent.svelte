@@ -101,12 +101,22 @@
 {#each displaySquares as row, rowIndex}
     <div class="row" bind:clientHeight={cellHeight}>
         {#each row as square, cellIndex}
-            <GridSquare
-                {fontSize}
-                isActive={rowIndex === activeRowIndex &&
-                    cellIndex === activeCellIndex}
-                {square}
-            />
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <!-- svelte-ignore a11y-no-static-element-interactions -->
+            <div
+                on:click={() => {
+                    if (square.isLit) {
+                        setActiveCell(rowIndex, cellIndex);
+                    }
+                }}
+            >
+                <GridSquare
+                    {fontSize}
+                    isActive={rowIndex === activeRowIndex &&
+                        cellIndex === activeCellIndex}
+                    {square}
+                />
+            </div>
         {/each}
     </div>
 {/each}

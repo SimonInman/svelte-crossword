@@ -46,7 +46,6 @@
         if (!allClues) {
             return [];
         }
-        console.log("length of networkClues: ");
         return allClues.filter((clue: Clue) => clueCoversCell(clue, row, col));
     };
 
