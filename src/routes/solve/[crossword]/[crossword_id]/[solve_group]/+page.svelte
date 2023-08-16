@@ -20,15 +20,18 @@
 
     $: useHorizontalLayout = innerWidth > 700;
 
-    const serverAddress = `https://csolve.fly.dev/crossword/${data.crossword}/${data.crossword_id}`;
+    $: crossword_id = data.crossword_id;
 
-    const serverUpdatesAddress = `https://csolve.fly.dev/solve/${data.crossword}/${data.crossword_id}/${data.solve_group}/get`;
+    $: serverAddress = `https://csolve.fly.dev/crossword/${data.crossword}/${crossword_id}`;
+
+    $: serverUpdatesAddress = `https://csolve.fly.dev/solve/${data.crossword}/${crossword_id}/${data.solve_group}/get`;
 
     $: networkGrid = data.grid;
     let networkClues: Clues;
     $: networkClues = data.networkData.clues;
 
-    $: crossword_id = data.crossword_id;
+    //task for fetching grid updates.
+    let poller: number | undefined;
 
     let activeClue: Clue | null;
     $: activeClue = null;
@@ -60,17 +63,14 @@
         }
         if (potential.length == 1) {
             // Probably shouldn't happen, but whatever
-            console.log("setting active clue");
             activeClue = potential[0];
             return;
         }
 
         if (potential[0] == activeClue) {
             // Switch clues if already have this one active.
-            console.log("setting active clue");
             activeClue = potential[1];
         } else {
-            console.log("setting active clue");
             activeClue = potential[0];
         }
     };
@@ -83,16 +83,30 @@
     };
 
     const fetchData = async () => {
+        let updatesAddress = `https://csolve.fly.dev/solve/${data.crossword}/${crossword_id}/${data.solve_group}/get`;
         try {
-            const response = await fetch(serverUpdatesAddress);
+            const response = await fetch(updatesAddress);
             let updatedGrid: Grid;
             updatedGrid = await response.json();
-            console.log("updatedGrid has height: " + updatedGrid.height);
             networkGrid = updatedGrid;
         } catch (error) {
             console.error("Error fetching data:", error);
         }
     };
+
+    $: fetchUpdateAnswers(crossword_id);
+
+    function fetchUpdateAnswers(crossword_id: string) {
+        if (!crossword_id) {
+            return;
+        }
+        // Need to use crossword_id to trigger reactivity.
+        let blah = crossword_id;
+        if (poller) {
+            clearInterval(poller);
+        }
+        poller = setInterval(fetchData, 5000);
+    }
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />
