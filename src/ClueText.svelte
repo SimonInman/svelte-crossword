@@ -7,7 +7,7 @@
 
 <span class="number">{clue.number}</span>
 <span class={answered ? "answeredClue" : "unansweredClue"}>
-    {clue.surface + " (" + clue.length.toString() + ")"}
+    {clue.surface}
 </span>
 
 <style>
