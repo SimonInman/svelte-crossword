@@ -78,6 +78,13 @@
         }
     };
 
+    // Callback when clue clicked on
+    const setActiveClue = (clue: Clue) => {
+        activeRowIndex = clue.position.row;
+        activeCellIndex = clue.position.column;
+        activeClue = clue;
+    };
+
     const fetchData = async () => {
         try {
             // Fetch data from the server (replace "YOUR_SERVER_ADDRESS" with the actual server URL)
@@ -111,6 +118,7 @@
                 widthAvailable={useHorizontalLayout
                     ? innerWidth - 500
                     : innerWidth}
+                {setActiveClue}
             />
         </div>
     {/key}
