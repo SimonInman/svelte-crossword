@@ -20,12 +20,10 @@
 
     $: useHorizontalLayout = innerWidth > 700;
 
-    // Placeholder for the server address
     const serverAddress = `https://csolve.fly.dev/crossword/${data.crossword}/${data.crossword_id}`;
 
     const serverUpdatesAddress = `https://csolve.fly.dev/solve/${data.crossword}/${data.crossword_id}/${data.solve_group}/get`;
 
-    let networkData: CrosswordForStyledCellValue;
     $: networkGrid = data.networkData.grid;
     let networkClues: Clues;
     $: networkClues = data.networkData.clues;
@@ -87,13 +85,11 @@
 
     const fetchData = async () => {
         try {
-            // Fetch data from the server (replace "YOUR_SERVER_ADDRESS" with the actual server URL)
             const response = await fetch(serverUpdatesAddress);
             let updatedGrid: Grid;
             updatedGrid = await response.json();
             console.log("updatedGrid has height: " + updatedGrid.height);
             networkGrid = updatedGrid;
-            // networkClues = networkData.clues;
         } catch (error) {
             console.error("Error fetching data:", error);
         }

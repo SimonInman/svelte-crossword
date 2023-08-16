@@ -14,7 +14,6 @@
 
     let cellHeight: number;
     $: fontSize = cellHeight * 0.6;
-    let square: Square;
     let emptyRow = () => {
         let out = new Array(grid.width).fill(null);
         return out;
@@ -47,23 +46,12 @@
     let displaySquares: Square[][];
     $: displaySquares = grid.cells.map((row) => convertRow(row));
 
-    const isActive = (rowIndex: number, cellIndex: number) => {
-        return rowIndex === activeRowIndex && cellIndex === activeCellIndex;
-    };
-
     const onKeyDown = (event: KeyboardEvent) => {
         if (event.key.startsWith("Arrow")) {
             console.log(event.key);
             event.preventDefault(); // Prevent browser default behavior for arrow keys
 
             const { key } = event;
-
-            console.log(
-                "current row and cell: " +
-                    activeRowIndex +
-                    " " +
-                    activeCellIndex
-            );
 
             // Calculate the new rowIndex and cellIndex based on the arrow key pressed
             let newRowIndex = activeRowIndex;
