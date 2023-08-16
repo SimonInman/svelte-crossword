@@ -110,7 +110,12 @@
             <div>{activeClue.surface}</div>
         {/if}
         <div class="gridContainer {useHorizontalLayout ? 'sideBySide' : ''}">
-            <GridComponent grid={networkGrid} {setActiveCell} />
+            <GridComponent
+                grid={networkGrid}
+                {setActiveCell}
+                initialActiveRowIndex={activeRowIndex}
+                initialActiveCellIndex={activeCellIndex}
+            />
         </div>
         <div class="columnContainer {useHorizontalLayout ? 'sideBySide' : ''}">
             <CluesContainer
