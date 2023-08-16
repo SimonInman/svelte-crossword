@@ -24,7 +24,7 @@
 
     const serverUpdatesAddress = `https://csolve.fly.dev/solve/${data.crossword}/${data.crossword_id}/${data.solve_group}/get`;
 
-    $: networkGrid = data.networkData.grid;
+    $: networkGrid = data.grid;
     let networkClues: Clues;
     $: networkClues = data.networkData.clues;
 
