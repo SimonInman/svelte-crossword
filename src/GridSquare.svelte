@@ -16,6 +16,7 @@
     <input
         style="font-size: {fontSize}px"
         class="{square.isLit ? 'lit' : 'unlit'} {isActive ? 'active' : ''}"
+        disabled={square.isLit ? false : true}
         type="text"
         bind:value={square.content}
         readonly={!square.isLit}
