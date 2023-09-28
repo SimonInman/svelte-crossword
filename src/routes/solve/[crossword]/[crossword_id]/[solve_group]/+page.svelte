@@ -141,6 +141,9 @@
 {/if}
 
 <style>
+  .columnContainer {
+    overflow-y: scroll;
+  }
   .activeClue {
     background-color: #989eff;
     width: 100vw;
