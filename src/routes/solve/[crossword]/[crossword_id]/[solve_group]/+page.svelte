@@ -115,9 +115,6 @@
 
 {#if networkGrid != undefined}
     {#key crossword_id}
-        {#if !useHorizontalLayout && activeClue}
-            <div>{activeClue.surface}</div>
-        {/if}
         <div class="gridContainer {useHorizontalLayout ? 'sideBySide' : ''}">
             <GridComponent
                 grid={networkGrid}
@@ -126,6 +123,12 @@
                 initialActiveCellIndex={activeCellIndex}
             />
         </div>
+        {#if !useHorizontalLayout && activeClue}
+            <div class="activeClue">
+			<span>{activeClue.number}.</span>
+			{" "}{activeClue.surface}
+	    </div>
+        {/if}
         <div class="columnContainer {useHorizontalLayout ? 'sideBySide' : ''}">
             <CluesContainer
                 clues={networkClues}
@@ -139,6 +142,12 @@
 {/if}
 
 <style>
+    .activeClue {
+	    background-color: #989eff;
+	    width: 100vw;
+	    padding: 8px;
+	    z-index:5;
+    }
     .gridContainer {
         max-width: 500px;
     }
