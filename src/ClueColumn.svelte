@@ -5,6 +5,7 @@
   export let clues: Clue[];
   export let title: string;
   export let setActiveClue: (clue: Clue) => void;
+  export let activeClue: null | Clue;
 </script>
 
 <h3 class="cluesHeading">{title}</h3>
@@ -16,7 +17,11 @@
       setActiveClue(clue);
     }}
   >
-    <ClueText {clue} answered={true} />
+    <ClueText
+      {clue}
+      answered={true}
+      active={activeClue?.number === clue.number}
+    />
   </div>
 {/each}
 

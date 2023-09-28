@@ -135,6 +135,7 @@
         clues={networkClues}
         widthAvailable={useHorizontalLayout ? innerWidth - 500 : innerWidth}
         {setActiveClue}
+        {activeClue}
       />
     </div>
   {/key}

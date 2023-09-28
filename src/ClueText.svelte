@@ -3,10 +3,11 @@
 
   export let answered: boolean;
   export let clue: Clue;
+  export let active: boolean;
 </script>
 
 <span class="number">{clue.number}</span>
-<span class="clue {answered ? 'answeredClue' : 'unansweredClue'}">
+<span class="clue" class:answered class:active>
   {clue.surface}
 </span>
 
@@ -21,6 +22,9 @@
     color: black;
   }
   .number {
+    font-weight: bold;
+  }
+  .active {
     font-weight: bold;
   }
 </style>
