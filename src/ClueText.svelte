@@ -16,11 +16,9 @@
     }
     .answeredClue {
         color: dimgrey;
-        font-weight: bold;
     }
     .unansweredClue {
         color: black;
-        font-weight: bold;
     }
     .number {
         font-weight: bold;
