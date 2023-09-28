@@ -23,7 +23,8 @@
   {#if square.isLit}
     <input
       style="font-size: {fontSize}px; background-color: {backgroundColour};"
-      class="lit {isActive ? 'active' : ''}"
+      class="lit"
+      class:active={isActive}
       type="text"
       bind:value={square.content}
       readonly={!square.isLit}
@@ -48,6 +49,9 @@
   }
   input:focus {
     outline: none;
+  }
+  input:hover {
+    cursor: pointer;
   }
   .cell-container {
     position: relative;
