@@ -16,6 +16,10 @@
           buildInputs = [
             pkgs.nodejs_20
           ];
+          shellHook = ''
+            root=$(git rev-parse --show-toplevel)
+            export PATH="$PATH:$root/node_modules/.bin"
+          '';
         };
       });
 }
