@@ -12,7 +12,7 @@
         inputElement.focus();
     }
 
-    $: backgroundColour = isPartOfCurrentClue ? "#ccffcc" : "white"
+    $: backgroundColour = isActive ? "green" : isPartOfCurrentClue ? "#ccffcc" : "white"
 </script>
 
 <div class="cell-container">
@@ -41,6 +41,9 @@
         height: 100%;
         text-align: center;
         border: 0;
+    }
+    input:focus {
+	    outline: none;
     }
     .cell-container {
         position: relative;
