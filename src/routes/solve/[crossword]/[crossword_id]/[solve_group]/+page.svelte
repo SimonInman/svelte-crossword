@@ -57,6 +57,8 @@
             return;
         }
         let potential = cluesCoveringCell(row, col);
+        activeRowIndex = row;
+        activeCellIndex = col;
         if (potential.length == 0) {
             // Probably shouldn't happen, but whatever
             return;
