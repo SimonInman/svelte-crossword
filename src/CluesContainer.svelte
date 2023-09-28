@@ -22,6 +22,7 @@
 <style>
     .container {
         width: 100%;
+	overflow-y: scroll;
     }
     .sideBySide {
         display: inline-block;
