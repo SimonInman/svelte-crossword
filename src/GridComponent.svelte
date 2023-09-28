@@ -112,6 +112,7 @@
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <!-- svelte-ignore a11y-no-static-element-interactions -->
             <div
+	        class="cell"
                 on:click={() => {
                     if (square.isLit) {
                         setActiveCell(rowIndex, cellIndex);
@@ -135,5 +136,8 @@
 <style>
     .row {
         display: flex;
+    }
+    .cell {
+	    flex: 1;
     }
 </style>

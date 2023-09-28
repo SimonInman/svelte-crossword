@@ -11,18 +11,23 @@
     $: if (isActive && inputElement) {
         inputElement.focus();
     }
+
     $: backgroundColour = isPartOfCurrentClue ? "#ccffcc" : "white"
 </script>
 
 <div class="cell-container">
+    {#if square.isLit}
     <input
-        class="{square.isLit ? 'lit' : 'unlit'} {isActive ? 'active' : ''}"
         style="font-size: {fontSize}px; background-color: {backgroundColour};"
+        class="lit {isActive ? 'active' : ''}"
         type="text"
         bind:value={square.content}
         readonly={!square.isLit}
         bind:this={inputElement}
     />
+    {:else}
+    <div class="unlit"></div>
+    {/if}
     {#if square.clueNumber}
         <p style="font-size: {fontSize * 0.5}px" class="clue-number-text">
             {square.clueNumber}
@@ -32,8 +37,6 @@
 
 <style>
     input {
-        flex: 1;
-        box-sizing: border-box; /* ensures padding and border are included in the element's total width */
         width: 100%;
         height: 100%;
         text-align: center;
@@ -81,6 +84,9 @@
     .unlit {
         background-color: #000;
         color: #fff;
+        width: 100%;
+        height: 100%;
+        border: 0;
     }
     input[type="text"] {
         -webkit-appearance: none;
