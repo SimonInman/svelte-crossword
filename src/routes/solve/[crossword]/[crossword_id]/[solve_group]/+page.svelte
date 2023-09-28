@@ -119,6 +119,7 @@
             <GridComponent
                 grid={networkGrid}
                 {setActiveCell}
+                {activeClue}
                 initialActiveRowIndex={activeRowIndex}
                 initialActiveCellIndex={activeCellIndex}
             />

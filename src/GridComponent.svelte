@@ -1,6 +1,6 @@
 <script lang="ts">
     import GridSquare from "./GridSquare.svelte";
-    import type { Grid } from "./api/types.svelte";
+    import type { Clue, Grid } from "./api/types.svelte";
     import type { CellForStyledCellValue } from "./api/types.svelte";
     import type { Square } from "./types.svelte";
 
@@ -8,9 +8,17 @@
     export let initialActiveRowIndex = 0;
     export let initialActiveCellIndex = 0;
     export let setActiveCell: (row: number, col: number) => void;
+    export let activeClue: Clue | null;
 
     $: activeRowIndex = initialActiveRowIndex;
     $: activeCellIndex = initialActiveCellIndex;
+
+    $: isPartOfCurrentClue = (targetRow: number, targetColumn: number) => {
+	    if(activeClue === null) return false;
+	    return activeClue.span_info.full_span.some(( {row, column} ) => {
+		    return row == targetRow && column == targetColumn;
+	    })
+    }
 
     let cellHeight: number;
     $: fontSize = cellHeight * 0.6;
@@ -114,6 +122,7 @@
                     {fontSize}
                     isActive={rowIndex === activeRowIndex &&
                         cellIndex === activeCellIndex}
+		    isPartOfCurrentClue={isPartOfCurrentClue(rowIndex, cellIndex)}
                     {square}
                 />
             </div>

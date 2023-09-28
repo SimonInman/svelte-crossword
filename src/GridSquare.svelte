@@ -3,6 +3,7 @@
 
     export let fontSize: number;
     export let isActive: boolean;
+    export let isPartOfCurrentClue: boolean;
     export let square: Square;
     // export let inputElement: HTMLInputElement | null;
 
@@ -10,13 +11,13 @@
     $: if (isActive && inputElement) {
         inputElement.focus();
     }
+    $: backgroundColour = isPartOfCurrentClue ? "#ccffcc" : "white"
 </script>
 
 <div class="cell-container">
     <input
-        style="font-size: {fontSize}px"
         class="{square.isLit ? 'lit' : 'unlit'} {isActive ? 'active' : ''}"
-        disabled={square.isLit ? false : true}
+        style="font-size: {fontSize}px; background-color: {backgroundColour};"
         type="text"
         bind:value={square.content}
         readonly={!square.isLit}
