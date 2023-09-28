@@ -6,11 +6,14 @@
 </script>
 
 <span class="number">{clue.number}</span>
-<span class={answered ? "answeredClue" : "unansweredClue"}>
+<span class="clue {answered ? 'answeredClue' : 'unansweredClue'}">
     {clue.surface}
 </span>
 
 <style>
+    .clue {
+	    cursor: pointer;
+    }
     .answeredClue {
         color: dimgrey;
         font-weight: bold;
