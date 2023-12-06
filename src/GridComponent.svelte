@@ -60,6 +60,8 @@
       content: gridCellValue(cell),
       clueNumber: cell.number,
       userStyle: gridCellStyle(cell),
+      hasRightBar: cell.across_word_end == null ? false : true,
+      hasBottomBar: cell.down_word_end == null ? false : true,
     };
   }
 

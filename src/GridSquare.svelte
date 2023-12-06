@@ -27,7 +27,11 @@
       : cellBackground(square);
 </script>
 
-<div class="cell-container">
+<div
+  class="cell-container"
+  style="border-bottom-width: {square.hasBottomBar ? '2.5px' : '1px'};
+border-right-width: {square.hasRightBar ? '2.5px' : '1px'};"
+>
   {#if square.isLit}
     <input
       style="font-size: {fontSize}px; background-color: {backgroundColour};"
@@ -71,7 +75,8 @@
     aspect-ratio: 1/1;
     min-width: 0;
     min-height: 0;
-    border: 1px solid #000;
+    border: solid #000;
+    border-width: 1px;
     font-size: 18px;
     text-transform: uppercase;
     text-align: center;

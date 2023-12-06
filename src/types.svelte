@@ -6,5 +6,7 @@
     content: string | null;
     clueNumber: number | null | undefined;
     userStyle: CellStyle | null;
+    hasRightBar: boolean;
+    hasBottomBar: boolean;
   };
 </script>
