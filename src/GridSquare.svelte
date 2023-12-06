@@ -5,18 +5,26 @@
   export let isActive: boolean;
   export let isPartOfCurrentClue: boolean;
   export let square: Square;
-  // export let inputElement: HTMLInputElement | null;
 
   let inputElement: HTMLInputElement | null;
   $: if (isActive && inputElement) {
     inputElement.focus();
   }
 
+  const cellBackground = (square: Square) => {
+    if (square.userStyle != null) {
+      const colour = square.userStyle.colour;
+      return `rgb(${colour.red} ${colour.green} ${colour.blue} / 0.1)`;
+    } else {
+      return "white";
+    }
+  };
+
   $: backgroundColour = isActive
     ? "green"
     : isPartOfCurrentClue
-    ? "#ccffcc"
-    : "white";
+      ? "#ccffcc"
+      : cellBackground(square);
 </script>
 
 <div class="cell-container">
