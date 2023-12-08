@@ -1,6 +1,6 @@
 <script lang="ts">
   import GridSquare from "./GridSquare.svelte";
-  import type { Clue, Grid } from "./api/types.svelte";
+  import type { CellStyle, Clue, Grid } from "./api/types.svelte";
   import type { CellForStyledCellValue } from "./api/types.svelte";
   import type { Square } from "./types.svelte";
 
@@ -29,6 +29,20 @@
   let inputElements: (GridSquare | null)[][] = [];
   inputElements = new Array(grid.height).fill(emptyRow());
 
+  const gridCellStyle = (cell: CellForStyledCellValue): CellStyle | null => {
+    if (cell.value == "Closed") {
+      return null;
+    }
+    if (cell.value == "Open") {
+      return null;
+    }
+    if (cell.value.FilledChar.style == undefined) {
+      return null;
+    }
+
+    return cell.value.FilledChar.style;
+  };
+
   const gridCellValue = (cell: CellForStyledCellValue) => {
     if (cell.value == "Closed") {
       return null;
@@ -37,7 +51,7 @@
       return null;
     }
 
-    return cell.value.FilledChar.value;
+    return cell.value.FilledChar.value!;
   };
 
   function convertCell(cell: CellForStyledCellValue): Square {
@@ -45,6 +59,9 @@
       isLit: cell.value != "Closed",
       content: gridCellValue(cell),
       clueNumber: cell.number,
+      userStyle: gridCellStyle(cell),
+      hasRightBar: cell.across_word_end == null ? false : true,
+      hasBottomBar: cell.down_word_end == null ? false : true,
     };
   }
 

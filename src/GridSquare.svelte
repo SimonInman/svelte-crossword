@@ -5,21 +5,33 @@
   export let isActive: boolean;
   export let isPartOfCurrentClue: boolean;
   export let square: Square;
-  // export let inputElement: HTMLInputElement | null;
 
   let inputElement: HTMLInputElement | null;
   $: if (isActive && inputElement) {
     inputElement.focus();
   }
 
+  const cellBackground = (square: Square) => {
+    if (square.userStyle != null) {
+      const colour = square.userStyle.colour;
+      return `rgb(${colour.red} ${colour.green} ${colour.blue} / 0.1)`;
+    } else {
+      return "white";
+    }
+  };
+
   $: backgroundColour = isActive
     ? "green"
     : isPartOfCurrentClue
-    ? "#ccffcc"
-    : "white";
+      ? "#ccffcc"
+      : cellBackground(square);
 </script>
 
-<div class="cell-container">
+<div
+  class="cell-container"
+  style="border-bottom-width: {square.hasBottomBar ? '2.5px' : '1px'};
+border-right-width: {square.hasRightBar ? '2.5px' : '1px'};"
+>
   {#if square.isLit}
     <input
       style="font-size: {fontSize}px; background-color: {backgroundColour};"
@@ -63,7 +75,8 @@
     aspect-ratio: 1/1;
     min-width: 0;
     min-height: 0;
-    border: 1px solid #000;
+    border: solid #000;
+    border-width: 1px;
     font-size: 18px;
     text-transform: uppercase;
     text-align: center;
