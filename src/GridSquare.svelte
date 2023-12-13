@@ -5,10 +5,29 @@
   export let isActive: boolean;
   export let isPartOfCurrentClue: boolean;
   export let square: Square;
+  export let updateCell: (newValue: string) => void;
 
   let inputElement: HTMLInputElement | null;
   $: if (isActive && inputElement) {
     inputElement.focus();
+  }
+
+  /**
+   * Handles the input event for the crossword input.
+   * @param {Event & { currentTarget: EventTarget & HTMLInputElement }} event - The input event.
+   */
+  function handleInput(
+    event: Event & { currentTarget: EventTarget & HTMLInputElement },
+  ) {
+    const target = event.currentTarget;
+    if (target) {
+      // todo check delete works
+      const inputChar = target.value
+        ? target.value.slice(-1).toUpperCase()
+        : "";
+      square.content = inputChar;
+      updateCell(inputChar);
+    }
   }
 
   const cellBackground = (square: Square) => {
@@ -39,6 +58,7 @@ border-right-width: {square.hasRightBar ? '2.5px' : '1px'};"
       class:active={isActive}
       type="text"
       bind:value={square.content}
+      on:input={handleInput}
       readonly={!square.isLit}
       bind:this={inputElement}
     />
