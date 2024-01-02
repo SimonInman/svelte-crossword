@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import type { Square } from "../../../../../types.svelte";
+  import { setCell } from "../../../../../api/utils";
   import type {
     Clue,
     Clues,
@@ -10,6 +11,7 @@
   import GridComponent from "../../../../../GridComponent.svelte";
   import CluesContainer from "../../../../../CluesContainer.svelte";
   import SelectionHeader from "../../../../../SelectionHeader.svelte";
+  import ClueColumn from "../../../../../ClueColumn.svelte";
 
   export let data;
 
@@ -128,6 +130,22 @@
         {activeClue}
         initialActiveRowIndex={activeRowIndex}
         initialActiveCellIndex={activeCellIndex}
+        setCell={(row, col, value) => {
+          const valueToSet = value
+            ? {
+                FilledChar: {
+                  value: value,
+                  // TODO: set the style
+                },
+              }
+            : "Open";
+          const toSet = {
+            row: row,
+            col: col,
+            value: valueToSet,
+          };
+          setCell(data.crossword, crossword_id, data.solve_group, toSet);
+        }}
       />
     </div>
     <div class="columnContainer {useHorizontalLayout ? 'sideBySide' : ''}">

@@ -9,6 +9,7 @@
   export let initialActiveCellIndex = 0;
   export let setActiveCell: (row: number, col: number) => void;
   export let activeClue: Clue | null;
+  export let setCell: (row: number, col: number, value: string) => void;
 
   $: activeRowIndex = initialActiveRowIndex;
   $: activeCellIndex = initialActiveCellIndex;
@@ -142,6 +143,7 @@
             cellIndex === activeCellIndex}
           isPartOfCurrentClue={isPartOfCurrentClue(rowIndex, cellIndex)}
           {square}
+          updateCell={(newValue) => setCell(rowIndex, cellIndex, newValue)}
         />
       </div>
     {/each}
