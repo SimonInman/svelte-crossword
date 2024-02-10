@@ -1,13 +1,23 @@
 <script lang="ts">
   import GridSquare from "./GridSquare.svelte";
-  import type { CellStyle, Clue, Grid } from "./api/types.svelte";
+  import type {
+    CellStyle,
+    Clue,
+    ClueSpanInfo,
+    Grid,
+    Position,
+  } from "./api/types.svelte";
   import type { CellForStyledCellValue } from "./api/types.svelte";
   import type { Square } from "./types.svelte";
 
   export let grid: Grid;
   export let initialActiveRowIndex = 0;
   export let initialActiveCellIndex = 0;
-  export let setActiveCell: (row: number, col: number) => void;
+  export let setActiveCell: (
+    row: number,
+    col: number,
+    keepActiveClue: boolean,
+  ) => void;
   export let activeClue: Clue | null;
   export let setCell: (row: number, col: number, value: string) => void;
 
@@ -119,9 +129,80 @@
       // Update the active cell's rowIndex and cellIndex
       activeRowIndex = newRowIndex;
       activeCellIndex = newCellIndex;
-      setActiveCell(activeRowIndex, activeCellIndex);
+      setActiveCell(activeRowIndex, activeCellIndex, false);
+    } else if (event.key === "Backspace") {
+      // If the current square is blank, move the cursor back.
+      // If it's not already blank, movement is handled by on:input.
+      if (
+        displaySquares[activeRowIndex][activeCellIndex].content != null &&
+        displaySquares[activeRowIndex][activeCellIndex].content != ""
+      ) {
+        return;
+      }
+
+      event.preventDefault(); // Don't let the backspace affect other content.
+      let activeSpan = activeClue?.span_info;
+      if (activeSpan === null) {
+        return;
+      }
+      let moveTo = prevCellForClue(activeRowIndex, activeCellIndex, activeSpan);
+      if (moveTo != null) {
+        setActiveCell(moveTo.row, moveTo.column, true);
+      }
     }
   };
+
+  function setCellAndMoveCursor(
+    rowIndex: number,
+    cellIndex: number,
+    newValue: string,
+  ): void {
+    setCell(rowIndex, cellIndex, newValue);
+
+    let activeSpan = activeClue?.span_info;
+    if (activeSpan == null) {
+      return;
+    }
+
+    // Move forwards or backwards depending on if we deleted cell contents.
+    let moveTo =
+      newValue == ""
+        ? prevCellForClue(rowIndex, cellIndex, activeSpan)
+        : nextCellForClue(rowIndex, cellIndex, activeSpan.full_span);
+
+    if (moveTo != null) {
+      setActiveCell(moveTo.row, moveTo.column, true);
+    }
+  }
+
+  function prevCellForClue(
+    rowIndex: number,
+    cellIndex: number,
+    spanInfo: ClueSpanInfo,
+  ): Position | null {
+    const reversed = [...spanInfo.full_span].reverse();
+    return nextCellForClue(rowIndex, cellIndex, reversed);
+  }
+
+  function nextCellForClue(
+    rowIndex: number,
+    cellIndex: number,
+    fullClueSpan: Position[],
+  ): Position | null {
+    let shouldReturnNextCell = false;
+
+    for (var i = 0; i < fullClueSpan.length; i++) {
+      if (shouldReturnNextCell) {
+        return fullClueSpan[i];
+      }
+      const thisCell = fullClueSpan[i];
+      if (thisCell.row == rowIndex && thisCell.column == cellIndex) {
+        shouldReturnNextCell = true;
+      }
+    }
+    // If we haven't returned, we must be at the end of the clue - don't move.
+    return null;
+  }
 </script>
 
 {#each displaySquares as row, rowIndex}
@@ -133,7 +214,7 @@
         class="cell"
         on:click={() => {
           if (square.isLit) {
-            setActiveCell(rowIndex, cellIndex);
+            setActiveCell(rowIndex, cellIndex, false);
           }
         }}
       >
@@ -143,7 +224,8 @@
             cellIndex === activeCellIndex}
           isPartOfCurrentClue={isPartOfCurrentClue(rowIndex, cellIndex)}
           {square}
-          updateCell={(newValue) => setCell(rowIndex, cellIndex, newValue)}
+          updateCell={(newValue) =>
+            setCellAndMoveCursor(rowIndex, cellIndex, newValue)}
         />
       </div>
     {/each}

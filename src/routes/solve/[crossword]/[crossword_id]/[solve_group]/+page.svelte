@@ -52,19 +52,23 @@
     return allClues.filter((clue: Clue) => clueCoversCell(clue, row, col));
   };
 
-  const setActiveCell = (row: number, col: number) => {
+  const setActiveCell = (row: number, col: number, keepActiveClue: boolean) => {
     if (!networkClues) {
       return;
     }
-    let potential = cluesCoveringCell(row, col);
     activeRowIndex = row;
     activeCellIndex = col;
+    // If we are within the same clue, we're finished.
+    if (keepActiveClue) {
+      return;
+    }
+
+    let potential = cluesCoveringCell(row, col);
     if (potential.length == 0) {
       // Probably shouldn't happen, but whatever
       return;
     }
     if (potential.length == 1) {
-      // Probably shouldn't happen, but whatever
       activeClue = potential[0];
       return;
     }
